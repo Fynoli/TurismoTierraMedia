@@ -59,23 +59,35 @@ public class Aplicacion {
 		// voy a dejar todos estos prints que puse asi ustedes tambien pueden ver que todo esto funciona asi no se gastan
 		// testeando, despues cuando todos los vean los borramos obvio*/
 		
-		LinkedList<Atraccion> atracciones=new LinkedList<Atraccion>();
-		atracciones=EntradaSalida.CargarAtracciones("atracciones.csv");
+		System.out.println("-------------------------------------------------------");
 		
-		for(Atraccion atraccion : atracciones) {
+		EntradaSalida database = new EntradaSalida();
+		
+		database.cargarArchivos();
+		for (Atraccion atraccion : database.getAtracciones()) {
 			System.out.println(atraccion);
+		}
+		
+		
+		System.out.println("-------------------------------------------------------");
+		
+		
+		for (Paquete paquete : database.getPaquetes()) {
+			System.out.println(paquete);
 		}
 		
 		System.out.println("-------------------------------------------------------");
 		
-		LinkedList<Usuario> usuarios=new LinkedList<Usuario>();
-		usuarios=EntradaSalida.CargarUsuarios("usuarios.csv");
-		
-		for(Usuario usuario : usuarios) {
+		for (Usuario usuario : database.getUsuarios()) {
 			System.out.println(usuario);
 		}
 		
 		
 	}
 
+	
+	
+	
+	
+	
 }

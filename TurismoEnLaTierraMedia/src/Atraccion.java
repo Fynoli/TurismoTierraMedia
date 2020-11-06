@@ -20,7 +20,7 @@ public class Atraccion extends Producto{
 	// a medida que la gente vaya usando la atraccion
 	
 	public void ocuparCupo(){
-		this.cupo_diario -= 1;
+		this.cupo_diario --;
 	}
 	
 	//Getters and setters
