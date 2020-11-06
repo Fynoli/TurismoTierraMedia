@@ -15,7 +15,7 @@ public class Usuario {
 	// no se si lo van a aplicar pero los profes recomentdaron utilizar Lower Camel Case en los nombres de variables (flor)
 	
 	
-	public Usuario(String nombre, int presupuesto, double tiempo_disponible, String atraccion_fav) {
+	public Usuario(String nombre, int presupuesto, double tiempo_disponible, enum atraccion_fav) {
 		this.nombre = nombre;
 		this.presupuesto = presupuesto;
 		this.tiempo_disponible = tiempo_disponible;
