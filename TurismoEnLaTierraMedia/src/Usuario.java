@@ -5,12 +5,14 @@ public class Usuario {
 	private String nombre;
 	private int presupuesto;
 	private double tiempo_disponible;
-	private String atraccion_fav;
+	private enum atraccion_fav { PAISAJE, AVENTURA, DEGUSTACION };
 	private LinkedList<String> itinerario;
 	
 
 	// el tema de la atraccion favorita estuve viendo videos sobre enum pero no entiendo como se puede aplicar aca
 	// con numeros enteros
+	// no necesariamente se usa con enteros, entras al dato y te salen esas tres opciones (flor)
+	// no se si lo van a aplicar pero los profes recomentdaron utilizar Lower Camel Case en los nombres de variables (flor)
 	
 	
 	public Usuario(String nombre, int presupuesto, double tiempo_disponible, String atraccion_fav) {
