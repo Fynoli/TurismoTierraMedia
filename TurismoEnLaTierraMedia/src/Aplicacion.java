@@ -1,11 +1,13 @@
+import java.io.FileNotFoundException;
+import java.util.LinkedList;
 
 public class Aplicacion {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException{
 		
 		
 		
-		// en principio todo el codigo que van a ver ahora solo lo hice para mas o menos ir dandole forma
+		/*// en principio todo el codigo que van a ver ahora solo lo hice para mas o menos ir dandole forma
 		// a lo que vamos a hacer y darnos una idea de como podemos hacerlo, tambien para testear que todo vaya funcionando 
 		// obviamente esto se puede mejorar y una vez mejorado lo vamos a aplicar a las demas clases 
 		
@@ -55,7 +57,23 @@ public class Aplicacion {
 		
 		
 		// voy a dejar todos estos prints que puse asi ustedes tambien pueden ver que todo esto funciona asi no se gastan
-		// testeando, despues cuando todos los vean los borramos obvio
+		// testeando, despues cuando todos los vean los borramos obvio*/
+		
+		LinkedList<Atraccion> atracciones=new LinkedList<Atraccion>();
+		atracciones=EntradaSalida.CargarAtracciones("atracciones.csv");
+		
+		for(Atraccion atraccion : atracciones) {
+			System.out.println(atraccion);
+		}
+		
+		System.out.println("-------------------------------------------------------");
+		
+		LinkedList<Usuario> usuarios=new LinkedList<Usuario>();
+		usuarios=EntradaSalida.CargarUsuarios("usuarios.csv");
+		
+		for(Usuario usuario : usuarios) {
+			System.out.println(usuario);
+		}
 		
 		
 	}

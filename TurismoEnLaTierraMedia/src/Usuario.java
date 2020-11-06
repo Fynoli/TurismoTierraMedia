@@ -2,50 +2,50 @@ import java.util.*;
 
 
 public class Usuario {
-	String Nombre;
-	int Presupuesto;
-	double Tiempo_disponible;
-	int Atraccion_fav;
-	private LinkedList<String> Itinerario;
+	private String nombre;
+	private int presupuesto;
+	private double tiempo_disponible;
+	private String atraccion_fav;
+	private LinkedList<String> itinerario;
 	
 
 	// el tema de la atraccion favorita estuve viendo videos sobre enum pero no entiendo como se puede aplicar aca
 	// con numeros enteros
 	
 	
-	public Usuario(String nombre, int presupuesto, int atraccion_fav, double tiempo_disponible) {
-		this.Nombre = nombre;
-		this.Presupuesto = presupuesto;
-		this.Tiempo_disponible = tiempo_disponible;
-		this.Atraccion_fav = atraccion_fav;
+	public Usuario(String nombre, int presupuesto, double tiempo_disponible, String atraccion_fav) {
+		this.nombre = nombre;
+		this.presupuesto = presupuesto;
+		this.tiempo_disponible = tiempo_disponible;
+		this.atraccion_fav = atraccion_fav;
 		
 	}
 
 	
 	
-	public void setValores(Atraccion Atraccion) {
-		 this.Presupuesto -= Atraccion.getCosto();
-		 this.Tiempo_disponible -= Atraccion.getTiempoVisita();
-	}
+	/*public void setValores(Atraccion atraccion) {
+		 this.presupuesto -= Atraccion.getCosto();
+		 this.tiempo_disponible -= Atraccion.getTiempoVisita();
+	}*/
 	
 	
 	
 	
 
 	
-	public void crearItinerario(String lugar) {
+	public void crearitinerario(String lugar) {
 		
 		
-		LinkedList <String> Itinerario = new LinkedList<String>();
+		LinkedList <String> itinerario = new LinkedList<String>();
 			
 		
-		Itinerario.add(lugar);
+		itinerario.add(lugar);
 		
 		
 		// este codigo es innecesario pero lo hice para chequear que se esten agregando
 		// a la lista, recorre cada elemento y lo va imprimiendo
 		
-		for (String ubicacion : Itinerario) {
+		for (String ubicacion : itinerario) {
 			System.out.println(ubicacion);
 			
 		}
@@ -62,18 +62,27 @@ public class Usuario {
 		public void finalizarRecorrido() {
 		
 		
-		LinkedList <String> Itinerario = new LinkedList<String>();
+		LinkedList <String> itinerario = new LinkedList<String>();
 		
 		// recorre cada una de las atracciones y las va eliminando
 		
-		for (String ubicacion : Itinerario) {
+		for (String ubicacion : itinerario) {
 			
-			Itinerario.remove(ubicacion);
+			itinerario.remove(ubicacion);
 		}
 		
-		System.out.print("lo que quedo es: " + Itinerario);
+		System.out.print("lo que quedo es: " + itinerario);
+		
+		
 		
 	}
+
+
+
+		@Override
+		public String toString() {
+			return "Usuario: "+nombre+"  Presupuesto: "+presupuesto+" monedas"+"  Tiempo disponible: "+tiempo_disponible+" horas"+"  Atraccion favorita: "+atraccion_fav;
+		}
 	
 	
 	
