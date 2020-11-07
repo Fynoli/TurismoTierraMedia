@@ -1,17 +1,15 @@
 
-public class Atraccion extends Producto{
+public class Atraccion extends Producto implements Comparable<Atraccion>{
 	
 	private String tipo_atraccion;
 	private int cupo_diario;
-	private double tiempo_de_recorrido;
 	
 	
 	
 	public Atraccion(String nombre, int costo, double tiempo_de_recorrido,int cupo_diario,String tipo_atraccion) {
-		super(nombre, costo);
+		super(nombre, costo,tiempo_de_recorrido);
 		this.tipo_atraccion=tipo_atraccion;
 		this.cupo_diario=cupo_diario;
-		this.tiempo_de_recorrido=tiempo_de_recorrido;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -47,19 +45,27 @@ public class Atraccion extends Producto{
 	}
 
 
-	public double getTiempo_de_recorrido() {
-		return tiempo_de_recorrido;
-	}
-
-
-	public void setTiempo_de_recorrido(double tiempo_de_recorrido) {
-		this.tiempo_de_recorrido = tiempo_de_recorrido;
+	@Override
+	public String toString() {
+		return "Araccion: "+getNombre()+"  Costo: "+getCosto()+" Monedas"+"  Tiempo: "+this.getTiempo()+" horas"+"  Cupo: "+cupo_diario+"  Tipo: "+tipo_atraccion;
 	}
 
 
 	@Override
-	public String toString() {
-		return "Araccion: "+getNombre()+"  Costo: "+getCosto()+" Monedas"+"  Tiempo: "+tiempo_de_recorrido+" horas"+"  Cupo: "+cupo_diario+"  Tipo: "+tipo_atraccion;
+	public int compareTo(Atraccion o) {
+		if(this.getCosto()>o.getCosto()) {
+			return 1;
+		}
+		if(o.getCosto()>this.getCosto()) {
+			return -1;
+		}
+		if(this.getTiempo()>o.getTiempo()) {
+			return 1;
+		}
+		if(this.getTiempo()<o.getTiempo()) {
+			return -1;
+		}
+		return 0;
 	}
 	
 	

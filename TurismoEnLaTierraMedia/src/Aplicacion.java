@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
+import java.io.*;
+import java.util.Scanner;
 
 public class Aplicacion {
 
@@ -59,7 +61,7 @@ public class Aplicacion {
 		// voy a dejar todos estos prints que puse asi ustedes tambien pueden ver que todo esto funciona asi no se gastan
 		// testeando, despues cuando todos los vean los borramos obvio*/
 		
-		System.out.println("-------------------------------------------------------");
+		/*System.out.println("-------------------------------------------------------");
 		
 		EntradaSalida database = new EntradaSalida();
 		
@@ -80,14 +82,45 @@ public class Aplicacion {
 		
 		for (Usuario usuario : database.getUsuarios()) {
 			System.out.println(usuario);
-		}
+		}*/
+		
+		EntradaSalida database=new EntradaSalida();
+		database.cargarArchivos();
+		Gestor gestor= new Gestor(database);
+		int decision=0;
+		Usuario usuario=database.getUsuarios().getLast();
+		Scanner sc=new Scanner(System.in);
+		System.out.println("Querido "+usuario.getNombre()+" se le ofrece:");
+		Producto oferta=null;
+		//Oferta
+		do {
+			oferta=gestor.GenerarSugerencia(usuario);
+			if(oferta==null) {//No hay mas ofertas
+				System.out.println("Sin ofertas disponibles. Quizas buscar otro laburo?");
+				gestor.ImprimirItinerario(usuario);
+				return;
+			}
+			if(oferta instanceof Paquete) {
+				System.out.println(((Paquete) oferta).toString());
+			}
+			else {
+				System.out.println(((Atraccion) oferta).toString());
+			}
+			System.out.println("Desea comprarla?");
+			System.out.println("1 - Si");
+			System.out.println("2 - No");
+			decision=sc.nextInt();
+			if(decision==1) {
+				usuario.addProducto(oferta);
+			}
+			else {
+				gestor.getRechazados().add(oferta);
+			}
+		}while(oferta!=null);
+		
+		
 		
 		
 	}
-
-	
-	
-	
-	
 	
 }

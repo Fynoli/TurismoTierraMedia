@@ -1,5 +1,6 @@
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
 
@@ -36,6 +37,7 @@ public class EntradaSalida {
 			atracciones.add(CreaAtraccionDesdeLinea(sc.nextLine()));
 		}
 		sc.close();
+		Collections.sort(atracciones,Collections.reverseOrder());
 		return atracciones;
 	}
 	
@@ -100,13 +102,12 @@ public class EntradaSalida {
 	
 	private Paquete CreaPaqueteDesdeLinea(String linea) {
 		Paquete paquete=null;
+
 		
 	    Scanner sc = new Scanner(linea);
 	    sc.useDelimiter(";");
-	    while (sc.hasNext()){
-	    	
-	    	
-	    	paquete=new Paquete(sc.next(), sc.nextInt(), sc.next(), leerAtraccionesDelPaquete(sc.next()));
+	    while (sc.hasNext()) { 	
+	    	paquete=new Paquete(sc.next(), sc.nextInt(), sc.next(),sc.next(), leerAtraccionesDelPaquete(sc.next()));
 	    }
 	    sc.close();
 	    return paquete;

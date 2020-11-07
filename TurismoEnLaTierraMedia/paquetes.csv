@@ -1,2 +1,4 @@
-Nombre;Costo final;Promocion;Atracciones
-Pack aventura;22;20% de descuento;Bosque negro,Mordor
+Nombre;Tipo de promo;Valor promo;Descripcion promo;Atracciones
+Pack aventura;1;20;20% de descuento;Bosque negro,Mordor
+Pack degustacion;2;36;Valor total 36;Lothlorien,La Comarca
+Pack paisajes;3;Erebor;Erebor gratis;Minas Tirith,Abismo de Helm,Erebor
