@@ -84,7 +84,7 @@ public class Paquete extends Producto {
 			}
 		}
 		return "Paquete: " + super.getNombre() + " costo: " + super.getCosto() + " Monedas" + " " + " incluye: "
-				+ nombresAtracciones + " Promocion: " + descPromo;
+				+ nombresAtracciones + " Promocion: " + descPromo + " Tiempo Total: " + super.getTiempo() + " Horas";
 	}
 
 }
