@@ -34,58 +34,64 @@ public class Gestor {
 				//Buscamos un paquete que tenga una atraccion que el usuario prefiera
 				for(Paquete producto: dataBase.getPaquetes()) {//Recorremos paquetes
 					for(Atraccion atraccion: (producto).getAtracciones()) {
-						if(conPreferencia) {
-							if(atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {//hay una que le gusta en el paquete
-								if(!usuario.getItinerario().contains(producto) && !rechazados.contains(producto)) {//no lo compro ni lo rechazo
-									if(usuario.puedeComprar(producto)) {//Puede costearlo y tiene tiempo para hacerlo
-										if(producto.tieneCupo()) {//hay al menos 1 espacio en todas las atracciones del paquete
+						if (!usuario.tieneProducto(producto) && !rechazados.contains(producto)) {
+							if (usuario.puedeComprar(producto)) {
+								if (producto.tieneCupo()) {
+									if (conPreferencia) {
+										if (atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {
 											return producto;
 										}
 									}
-								}
-							}
-						}
-						else {
-							if(!usuario.getItinerario().contains(producto) && !rechazados.contains(producto)) {//no lo compro ni lo rechazo
-								if(usuario.puedeComprar(producto)) {//Puede costearlo y tiene tiempo para hacerlo
-									if(producto.tieneCupo()) {//hay al menos 1 espacio en todas las atracciones del paquete
+									else {
 										return producto;
 									}
 								}
 							}
 						}
 						
+						
 					}
 				}
 				//Buscamos la atraccion mas cara de las que coinciden con su preferencia
 				LinkedList<Atraccion> atracciones=new LinkedList<Atraccion>();
 				for(Atraccion atraccion: dataBase.getAtracciones()) {
-					if(conPreferencia) {
-						if(atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {//la atraccion le gusta
-							if(!usuario.getItinerario().contains(atraccion) && !rechazados.contains(atraccion)) {//no la tiene en su itinerario ni tampoco la rechazo
-								if(usuario.puedeComprar(atraccion)) {//tiene tiempo y dinero
-									if(atraccion.tieneCupo()) {//la atraccion tiene cupo
+					if(!usuario.tieneProducto(atraccion) && !rechazados.contains(atraccion)) { // si el usuario no tiene la atraccion en su itinerario y tampoco la rechazo
+						if(usuario.puedeComprar(atraccion)) {
+							if(atraccion.tieneCupo()) {
+								if(conPreferencia) {
+									if(atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {
 										atracciones.add(atraccion);
 									}
+									
 								}
-							}
-						}
-					}
-					else {
-						if(!usuario.getItinerario().contains(atraccion) && !rechazados.contains(atraccion)) {//no la tiene en su itinerario ni tampoco la rechazo
-							if(usuario.puedeComprar(atraccion)) {//tiene tiempo y dinero
-								if(atraccion.tieneCupo()) {//la atraccion tiene cupo
+								else {
 									atracciones.add(atraccion);
 								}
 							}
 						}
 					}
+					
 				}
 				if(!atracciones.isEmpty()) {
 					return atracciones.getFirst();
 				}
 				
 				return null;
+	}
+	
+	
+	
+	public void mostrarItinerario(Usuario usuario) {
+		System.out.println("\n\nItinerario de: " + usuario.getNombre());
+		 for(Producto producto:usuario.getItinerario()) {
+         	if(producto instanceof Paquete) {
+         		System.out.println("\n" + (((Paquete) producto).toString()));
+         	}
+         	else {
+         		System.out.println("\n" + ((Atraccion) producto).toString());
+         	}
+         }
+		System.out.println("\nCosto total: " + usuario.costoItinerario() + " Monedas   Tiempo total: " + usuario.tiempoItinerario() + " Horas\n");
 	}
 	
 	public void ImprimirItinerario(Usuario usuario) {

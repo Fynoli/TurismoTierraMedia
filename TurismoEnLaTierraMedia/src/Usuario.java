@@ -30,36 +30,34 @@ public class Usuario {
 	 * }
 	 */
 	public boolean puedeComprar(Producto p) {
-		return this.getTiempo_disponible()>=p.getTiempo() && this.getPresupuesto()>=p.getCosto();
+		return this.getTiempo_disponible() >= p.getTiempo() && this.getPresupuesto() >= p.getCosto();
 	}
-	
+
 	public void addProducto(Producto producto) {
-		if(producto instanceof Paquete) {//Si es paquete le quito un cupo a cada atraccion
-			for(Atraccion a: ((Paquete) producto).getAtracciones()) {
+		if (producto instanceof Paquete) {// Si es paquete le quito un cupo a cada atraccion
+			for (Atraccion a : ((Paquete) producto).getAtracciones()) {
 				a.ocuparCupo();
 			}
-		}
-		else if(producto instanceof Atraccion) {//si es atraccion le quito un cupo
+		} else if (producto instanceof Atraccion) {// si es atraccion le quito un cupo
 			((Atraccion) producto).ocuparCupo();
 		}
 		itinerario.add(producto);
-		presupuesto-=producto.getCosto();
-		tiempo_disponible-=producto.getTiempo();
+		presupuesto -= producto.getCosto();
+		tiempo_disponible -= producto.getTiempo();
 	}
-	
-	
+
 	public int costoItinerario() {
-		int costo=0;
-		for(Producto producto: itinerario) {
-			costo+=producto.getCosto();
+		int costo = 0;
+		for (Producto producto : itinerario) {
+			costo += producto.getCosto();
 		}
 		return costo;
 	}
-	
+
 	public double tiempoItinerario() {
-		double tiempo=0;
-		for(Producto producto: itinerario) {
-			tiempo+=producto.getTiempo();
+		double tiempo = 0;
+		for (Producto producto : itinerario) {
+			tiempo += producto.getTiempo();
 		}
 		return tiempo;
 	}
@@ -88,6 +86,26 @@ public class Usuario {
 	public String toString() {
 		return "Usuario: " + nombre + "  Presupuesto: " + presupuesto + " monedas" + "  Tiempo disponible: "
 				+ tiempo_disponible + " horas" + "  Atraccion favorita: " + atraccion_fav;
+	}
+
+	public boolean tieneProducto(Producto producto) {
+
+		if (producto instanceof Paquete) { // si el producto es un paquete entonces
+			return this.getItinerario().contains(producto); // retorna true si el paquete esta en el itinerario
+		} else {
+			if (producto instanceof Atraccion) { // si el producto es una atraccion
+				for (Producto p : itinerario) { // recorres cada producto del itinerario
+					if (p instanceof Paquete) { // si el producto en el itinerario es un paquete
+						return ((Paquete) p).getAtracciones().contains(producto); // retorna true si la atraccion esta
+																					// en el paquete
+
+					} else if (p instanceof Atraccion) { // si el producto en el itinerario es un atraccion
+						return p.equals(producto); // retorna true si la atraccion en el itinerario es igual al producto
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 }

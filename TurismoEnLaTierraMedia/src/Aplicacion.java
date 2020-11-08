@@ -84,39 +84,51 @@ public class Aplicacion {
 			System.out.println(usuario);
 		}*/
 		
-		EntradaSalida database=new EntradaSalida();
-		database.cargarArchivos();
-		Gestor gestor= new Gestor(database);
-		int decision=0;
-		Usuario usuario=database.getUsuarios().getLast();
-		Scanner sc=new Scanner(System.in);
-		System.out.println("Querido "+usuario.getNombre()+" se le ofrece:");
+		EntradaSalida database=new EntradaSalida(); // creamos la base de datos 
+		database.cargarArchivos(); // se cargan los archivos (los csv)
+		Gestor gestor= new Gestor(database); // creas un gestor y le pasas la base de datos para que administre
+		String decision = "Y"; 
+		
+		Scanner sc=new Scanner(System.in); // creamos un scanner para leer la entrada de consola 
+		
 		Producto oferta=null;
-		//Oferta
-		do {
-			oferta=gestor.GenerarSugerencia(usuario);
-			if(oferta==null) {//No hay mas ofertas
-				System.out.println("Sin ofertas disponibles. Quizas buscar otro laburo?");
-				gestor.ImprimirItinerario(usuario);
-				return;
+		
+		for (Usuario usuario : database.getUsuarios()) {
+			System.out.println("Bienvenido " + usuario.getNombre() + ". Prepara tu itinerario");
+			System.out.println("Presta atencion a las siguientes ofertas: ");
+			while(null != (oferta = gestor.GenerarSugerencia(usuario))) {
+				oferta=gestor.GenerarSugerencia(usuario);
+				
+				if(oferta instanceof Paquete) {
+					System.out.println(((Paquete) oferta).toString());
+				}
+				else {
+					System.out.println(((Atraccion) oferta).toString());
+				}
+				System.out.println("Desea comprarla?");
+				System.out.println("Y - Si");
+				System.out.println("N - No");
+				decision=sc.next();
+				if(decision.equalsIgnoreCase("Y")) {
+					usuario.addProducto(oferta);
+					System.out.println("Producto adquirido. Monedas restantes: " + usuario.getPresupuesto() + " Tiempo restante: " + usuario.getTiempo_disponible());
+				}
+				else {
+					gestor.getRechazados().add(oferta);
+				}
 			}
-			if(oferta instanceof Paquete) {
-				System.out.println(((Paquete) oferta).toString());
-			}
-			else {
-				System.out.println(((Atraccion) oferta).toString());
-			}
-			System.out.println("Desea comprarla?");
-			System.out.println("1 - Si");
-			System.out.println("2 - No");
-			decision=sc.nextInt();
-			if(decision==1) {
-				usuario.addProducto(oferta);
-			}
-			else {
-				gestor.getRechazados().add(oferta);
-			}
-		}while(oferta!=null);
+			System.out.println("No hay mas ofertas disponibles. Este es tu itinerario para el dia de hoy.");
+			System.out.println("---------------------------------------------- \n");
+			gestor.ImprimirItinerario(usuario);
+			gestor.mostrarItinerario(usuario);
+			System.out.println("---------------------------------------------- \n");
+			gestor.getRechazados().clear();
+		}
+		
+		
+		
+		
+		
 		
 		
 		
