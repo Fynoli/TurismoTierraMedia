@@ -34,45 +34,19 @@ public class Usuario {
 	}
 	
 	public void addProducto(Producto producto) {
+		if(producto instanceof Paquete) {//Si es paquete le quito un cupo a cada atraccion
+			for(Atraccion a: ((Paquete) producto).getAtracciones()) {
+				a.ocuparCupo();
+			}
+		}
+		else if(producto instanceof Atraccion) {//si es atraccion le quito un cupo
+			((Atraccion) producto).ocuparCupo();
+		}
 		itinerario.add(producto);
 		presupuesto-=producto.getCosto();
 		tiempo_disponible-=producto.getTiempo();
 	}
 	
-	
-
-	public void crearitinerario(String lugar) {
-
-		LinkedList<String> itinerario = new LinkedList<String>();
-
-		itinerario.add(lugar);
-
-		// este codigo es innecesario pero lo hice para chequear que se esten agregando
-		// a la lista, recorre cada elemento y lo va imprimiendo
-
-		for (String ubicacion : itinerario) {
-			System.out.println(ubicacion);
-
-		}
-
-	}
-
-	// cuando finalice el recorrido sacamos todas las atracciones de su itinerario
-
-	public void finalizarRecorrido() {
-
-		LinkedList<String> itinerario = new LinkedList<String>();
-
-		// recorre cada una de las atracciones y las va eliminando
-
-		for (String ubicacion : itinerario) {
-
-			itinerario.remove(ubicacion);
-		}
-
-		System.out.print("lo que quedo es: " + itinerario);
-
-	}
 	
 	public int costoItinerario() {
 		int costo=0;

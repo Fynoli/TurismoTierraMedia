@@ -21,6 +21,10 @@ public class Atraccion extends Producto implements Comparable<Atraccion>{
 		this.cupo_diario --;
 	}
 	
+	public boolean tieneCupo() {
+		return this.cupo_diario>0;
+	}
+	
 	//Getters and setters
 	public String getTipo_atraccion() {
 		return tipo_atraccion;

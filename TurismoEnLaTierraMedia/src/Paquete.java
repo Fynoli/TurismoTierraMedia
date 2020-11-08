@@ -44,6 +44,15 @@ public class Paquete extends Producto {
 
 	}
 	
+	public boolean tieneCupo() {//True si todas las atracciones tienen cupo
+		for(Atraccion a: this.getAtracciones()) {
+			if(!a.tieneCupo()) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	
 
 	public LinkedList<Atraccion> getAtracciones() {

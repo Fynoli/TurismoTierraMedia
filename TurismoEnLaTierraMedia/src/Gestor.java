@@ -37,16 +37,20 @@ public class Gestor {
 						if(conPreferencia) {
 							if(atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {//hay una que le gusta en el paquete
 								if(!usuario.getItinerario().contains(producto) && !rechazados.contains(producto)) {//no lo compro ni lo rechazo
-									if(usuario.puedeComprar(producto)) {
-										return producto;
+									if(usuario.puedeComprar(producto)) {//Puede costearlo y tiene tiempo para hacerlo
+										if(producto.tieneCupo()) {//hay al menos 1 espacio en todas las atracciones del paquete
+											return producto;
+										}
 									}
 								}
 							}
 						}
 						else {
 							if(!usuario.getItinerario().contains(producto) && !rechazados.contains(producto)) {//no lo compro ni lo rechazo
-								if(usuario.puedeComprar(producto)) {
-									return producto;
+								if(usuario.puedeComprar(producto)) {//Puede costearlo y tiene tiempo para hacerlo
+									if(producto.tieneCupo()) {//hay al menos 1 espacio en todas las atracciones del paquete
+										return producto;
+									}
 								}
 							}
 						}
@@ -60,7 +64,9 @@ public class Gestor {
 						if(atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {//la atraccion le gusta
 							if(!usuario.getItinerario().contains(atraccion) && !rechazados.contains(atraccion)) {//no la tiene en su itinerario ni tampoco la rechazo
 								if(usuario.puedeComprar(atraccion)) {//tiene tiempo y dinero
-									atracciones.add(atraccion);
+									if(atraccion.tieneCupo()) {//la atraccion tiene cupo
+										atracciones.add(atraccion);
+									}
 								}
 							}
 						}
@@ -68,7 +74,9 @@ public class Gestor {
 					else {
 						if(!usuario.getItinerario().contains(atraccion) && !rechazados.contains(atraccion)) {//no la tiene en su itinerario ni tampoco la rechazo
 							if(usuario.puedeComprar(atraccion)) {//tiene tiempo y dinero
-								atracciones.add(atraccion);
+								if(atraccion.tieneCupo()) {//la atraccion tiene cupo
+									atracciones.add(atraccion);
+								}
 							}
 						}
 					}
