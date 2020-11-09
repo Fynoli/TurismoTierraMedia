@@ -11,19 +11,17 @@ public class EntradaSalida {
 	private LinkedList<Usuario> usuarios;
 	private LinkedList<Paquete> paquetes;
 	
-	
+	//constructor vacio igual que el por defecto
 	public EntradaSalida() 
 	{
 		
-	}
-
-	
+	}// Es necesario?
 	public void cargarArchivos() throws FileNotFoundException {
 		
-		// rellena las listas con los archivos. manejate flor
-		this.atracciones = cargarAtracciones("atracciones.csv");
-		this.usuarios = cargarUsuarios("usuarios.csv");
-		this.paquetes = cargarPaquetes("paquetes.csv");
+		// rellena las listas con los archivos
+		this.atracciones = cargarAtracciones("TurismoTierraMedia/TurismoEnLaTierraMedia/datos/atracciones.csv");
+		this.usuarios = cargarUsuarios("TurismoTierraMedia/TurismoEnLaTierraMedia/datos/usuarios.csv");
+		this.paquetes = cargarPaquetes("TurismoTierraMedia/TurismoEnLaTierraMedia/datos/paquetes.csv");
 	}
 	
 
@@ -32,17 +30,17 @@ public class EntradaSalida {
 	private LinkedList<Atraccion> cargarAtracciones (String archivo_atracciones) throws FileNotFoundException{
 		LinkedList<Atraccion> atracciones = new LinkedList<Atraccion>();
 		Scanner sc = new Scanner( new File(archivo_atracciones));
-		sc.nextLine(); //Para omitir las cabeceras
+		sc.nextLine(); //Para omitir las cabeceras del csv
 		while (sc.hasNextLine()) {
 			atracciones.add(CreaAtraccionDesdeLinea(sc.nextLine()));
 		}
 		sc.close();
-		Collections.sort(atracciones,Collections.reverseOrder());
+		Collections.sort(atracciones,Collections.reverseOrder()); //Las ordena de la forma que nos interesa
 		return atracciones;
 	}
 	
 	private Atraccion CreaAtraccionDesdeLinea(String linea) {
-		Atraccion atraccion=null;
+		Atraccion atraccion = null;
 	    Scanner sc = new Scanner(linea);
 	    sc.useDelimiter(";");
 	    while (sc.hasNext()){
@@ -56,7 +54,7 @@ public class EntradaSalida {
 	private LinkedList<Usuario> cargarUsuarios (String archivo_usuarios) throws FileNotFoundException{
 		LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
 		Scanner sc = new Scanner( new File(archivo_usuarios));
-		sc.nextLine(); //Para omitir las cabeceras
+		sc.nextLine(); //Para omitir las cabeceras del scv
 		while (sc.hasNextLine()) {
 			usuarios.add(CreaUsuariosDesdeLinea(sc.nextLine()));
 		}
@@ -74,12 +72,8 @@ public class EntradaSalida {
 	    sc.close();
 	    return usuario;
 	}
-	
-	
-	
-	
-	
-	// leer el archivo donde ponemos los paquetes 
+
+	// leer el archivo donde ponemos los paquetes
 	// lee una lista de strings 
 	
 	private LinkedList<Paquete> cargarPaquetes (String archivo_paquetes) throws FileNotFoundException{
