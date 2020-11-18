@@ -1,7 +1,6 @@
 Cliente: Gandalf
 
 Itinerario: 
-Araccion: Lothlorien  Costo: 35 Monedas  Tiempo: 1.0 horas  Cupo: 29  Tipo: Degustacion
-Araccion: Mordor  Costo: 25 Monedas  Tiempo: 3.0 horas  Cupo: 3  Tipo: Aventura
+Paquete: Pack degustacion costo: 36 Monedas  incluye: Lothlorien, La Comarca Promocion: Valor total 36
 
-Costo total: 60 Monedas        Tiempo total: 4.0 Horas
+Costo total: 36 Monedas        Tiempo total: 3.5 Horas

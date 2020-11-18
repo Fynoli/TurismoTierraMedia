@@ -1,6 +1,5 @@
 Cliente: Sam
 
 Itinerario: 
-Paquete: Pack degustacion costo: 36 Monedas  incluye: Lothlorien, La Comarca Promocion: Valor total 36
 
-Costo total: 36 Monedas        Tiempo total: 3.5 Horas
+Costo total: 0 Monedas        Tiempo total: 0.0 Horas
