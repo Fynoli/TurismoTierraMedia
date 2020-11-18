@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 public class Gestor {
 	EntradaSalida dataBase;
@@ -91,15 +93,19 @@ public class Gestor {
          		System.out.println("\n" + ((Atraccion) producto).toString());
          	}
          }
-		System.out.println("\nCosto total: " + usuario.costoItinerario() + " Monedas   Tiempo total: " + usuario.tiempoItinerario() + " Horas\n");
+
+		 System.out.println("\nCosto total: " + usuario.costoItinerario() + " Monedas   Tiempo total: " + usuario.tiempoItinerario() + " Horas\n");
+		System.out.println("\n Le restan en su presupuesto: "+ usuario.getPresupuesto() + " Monedas y le quedan "+ usuario.getTiempo_disponible()+" Horas libres");
+
 	}
 	
 	public void ImprimirItinerario(Usuario usuario) {
 		FileWriter archivo = null;
         PrintWriter pw = null;
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         try
         {
-            archivo = new FileWriter("itinerario de "+usuario.getNombre()+".txt");
+            archivo = new FileWriter("TurismoTierraMedia/TurismoEnLaTierraMedia/itinerarios/itinerario de "+usuario.getNombre()+"_"+ df.format(LocalDateTime.now())+".txt");
             pw = new PrintWriter(archivo);
             
             pw.println("Cliente: "+usuario.getNombre()+"\n");
@@ -115,7 +121,7 @@ public class Gestor {
             }
             
             pw.println("\nCosto total: "+usuario.costoItinerario()+" Monedas        Tiempo total: "+usuario.tiempoItinerario()+" Horas");
-
+			pw.println("\n Le restan en su presupuesto: "+ usuario.getPresupuesto() + " Monedas y le quedan "+ usuario.getTiempo_disponible()+" Horas libres");
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

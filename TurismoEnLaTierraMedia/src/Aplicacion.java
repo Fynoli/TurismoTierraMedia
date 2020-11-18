@@ -98,7 +98,8 @@ public class Aplicacion {
 			System.out.println("Presta atencion a las siguientes ofertas: ");
 			while(null != (oferta = gestor.GenerarSugerencia(usuario))) {
 				oferta=gestor.GenerarSugerencia(usuario);
-				
+				System.out.println("Monedas restantes: " + usuario.getPresupuesto() + " Tiempo restante: " + usuario.getTiempo_disponible());
+
 				if(oferta instanceof Paquete) {
 					System.out.println(((Paquete) oferta).toString());
 				}
@@ -111,7 +112,7 @@ public class Aplicacion {
 				decision=sc.next();
 				if(decision.equalsIgnoreCase("Y")) {
 					usuario.addProducto(oferta);
-					System.out.println("Producto adquirido. Monedas restantes: " + usuario.getPresupuesto() + " Tiempo restante: " + usuario.getTiempo_disponible());
+					System.out.println("Producto adquirido!");
 				}
 				else {
 					gestor.getRechazados().add(oferta);
@@ -125,9 +126,7 @@ public class Aplicacion {
 			gestor.getRechazados().clear();
 		}
 		
-		
-		
-		
+		System.out.println("Programa Finalizado con exito, Se generaron los archivos en la carpeta de itinerarios");
 		
 		
 		

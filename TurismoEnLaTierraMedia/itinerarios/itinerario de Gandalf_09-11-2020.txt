@@ -1,0 +1,8 @@
+Cliente: Gandalf
+
+Itinerario: 
+Paquete: Pack degustacion costo: 36 Monedas  incluye: Lothlorien, La Comarca Promocion: Valor total 36 Tiempo Total: 3.5 Horas
+
+Costo total: 36 Monedas        Tiempo total: 3.5 Horas
+
+ Le restan en su presupuesto: 64 Monedas y le quedan 1.5 Horas libres
