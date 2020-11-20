@@ -1,8 +1,0 @@
-Cliente: Frodo
-
-Itinerario: 
-Paquete: Pack paisajes costo: 10 Monedas  incluye: Minas Tirith, Abismo de Helm, Erebor Promocion: Erebor gratis Tiempo Total: 7.5 Horas
-
-Costo total: 10 Monedas        Tiempo total: 7.5 Horas
-
- Le restan en su presupuesto: 0 Monedas y le quedan 0.5 Horas libres

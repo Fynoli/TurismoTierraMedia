@@ -1,8 +1,0 @@
-Cliente: Sam
-
-Itinerario: 
-Paquete: Pack aventura costo: 28 Monedas  incluye: Bosque negro, Mordor Promocion: 20% de descuento Tiempo Total: 7.0 Horas
-
-Costo total: 28 Monedas        Tiempo total: 7.0 Horas
-
- Le restan en su presupuesto: 8 Monedas y le quedan 1.0 Horas libres

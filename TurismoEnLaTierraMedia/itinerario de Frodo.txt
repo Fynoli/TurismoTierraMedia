@@ -1,6 +1,0 @@
-Cliente: Frodo
-
-Itinerario: 
-Araccion: Moria  Costo: 10 Monedas  Tiempo: 2.0 horas  Cupo: 5  Tipo: Aventura
-
-Costo total: 10 Monedas        Tiempo total: 2.0 Horas
