@@ -16,9 +16,9 @@ public class Gestor {
 		rechazados=new LinkedList<Producto>();
 	}
 
-	public Producto GenerarSugerencia(Usuario usuario) {
+	public Oferta GenerarSugerencia(Usuario usuario) {
 
-		Producto sugerencia;
+		Oferta sugerencia;
 
 		sugerencia = buscarProducto(usuario,true);
 		if(sugerencia == null) {
@@ -28,7 +28,7 @@ public class Gestor {
 		return sugerencia;
 	}
 
-	private void buscarProductos(Usuario usuario) {
+	private Oferta buscarProductos(Usuario usuario) {
 		ResultSet rs = Basedatos.getResults("\n" +
 				"SELECT promocion.nombre, promocion.descripcion, SUM(promocion.costo), atraccion.nombre\n" +
 				"FROM tipo_atraccion\n" +
