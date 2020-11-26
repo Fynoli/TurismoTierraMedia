@@ -92,6 +92,9 @@ public class Aplicacion {
 		Scanner sc=new Scanner(System.in); // creamos un scanner para leer la entrada de consola 
 		
 		Producto oferta=null;
+		for (int i=0; i < cantUsers; i++){
+			Usuario 
+		}
 		
 		for (Usuario usuario : database.getUsuarios()) {
 			System.out.println("Bienvenido " + usuario.getNombre() + ". Prepara tu itinerario");

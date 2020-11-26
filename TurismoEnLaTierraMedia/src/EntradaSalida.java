@@ -1,5 +1,7 @@
 import java.io.FileNotFoundException;
 import java.io.File;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -16,11 +18,11 @@ public class EntradaSalida {
 	{
 		
 	}// Es necesario?
-	public void cargarArchivos() throws FileNotFoundException {
+	public void cargarArchivos() throws FileNotFoundException, SQLException {
 		
 		// rellena las listas con los archivos
 		this.atracciones = cargarAtracciones("TurismoTierraMedia/TurismoEnLaTierraMedia/datos/atracciones.csv");
-		this.usuarios = cargarUsuarios("TurismoTierraMedia/TurismoEnLaTierraMedia/datos/usuarios.csv");
+		this.usuarios = cargarUsuarios();
 		this.paquetes = cargarPaquetes("TurismoTierraMedia/TurismoEnLaTierraMedia/datos/paquetes.csv");
 	}
 	
@@ -51,14 +53,15 @@ public class EntradaSalida {
 	}
 	
 	
-	private LinkedList<Usuario> cargarUsuarios (String archivo_usuarios) throws FileNotFoundException{
+	private LinkedList<Usuario> cargarUsuarios () throws SQLException {
 		LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
-		Scanner sc = new Scanner( new File(archivo_usuarios));
-		sc.nextLine(); //Para omitir las cabeceras del scv
-		while (sc.hasNextLine()) {
-			usuarios.add(CreaUsuariosDesdeLinea(sc.nextLine()));
+		ResultSet rs = Basedatos.getResults("\n" +
+				"SELECT usuario.nombre, usuario.usuario_id, usuario.presupuesto, tipo_atraccion.nombre, usuario.tiempo_disponible\n" +
+				"FROM usuario\n" +
+				"JOIN tipo_atraccion ON usuario.atraccion_favorita = tipo_atraccion.tipo_atraccion_id");
+		while(rs.next()) {
+			usuarios.add(new Usuario(rs.getString("nombre"), rs.getInt("presupuesto"), rs.getDouble("tiempo_disponible"),rs.getString("tipo_atraccion.nombre")));
 		}
-		sc.close();
 		return usuarios;
 	}
 	

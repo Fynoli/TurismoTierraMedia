@@ -5,7 +5,8 @@ public class Usuario {
 	private int presupuesto;
 	private double tiempo_disponible;
 	private String atraccion_fav;
-	private LinkedList<Producto> itinerario;
+	private int usuario_id;
+//	private LinkedList<Producto> itinerario;
 
 	
 
@@ -14,7 +15,7 @@ public class Usuario {
 		this.presupuesto = presupuesto;
 		this.tiempo_disponible = tiempo_disponible;
 		this.atraccion_fav = atraccion_fav;
-		itinerario = new LinkedList<Producto>();
+//		itinerario = new LinkedList<Producto>();
 
 	}
 
@@ -35,24 +36,24 @@ public class Usuario {
 		} else if (producto instanceof Atraccion) {// si es atraccion le quito un cupo
 			((Atraccion) producto).ocuparCupo();
 		}
-		itinerario.add(producto);
+//		itinerario.add(producto);
 		presupuesto -= producto.getCosto();
 		tiempo_disponible -= producto.getTiempo();
 	}
 
 	public int costoItinerario() {
 		int costo = 0;
-		for (Producto producto : itinerario) {
-			costo += producto.getCosto();
-		}
+//		for (Producto producto : itinerario) {
+//			costo += producto.getCosto();
+//		}
 		return costo;
 	}
 
 	public double tiempoItinerario() {
 		double tiempo = 0;
-		for (Producto producto : itinerario) {
-			tiempo += producto.getTiempo();
-		}
+//		for (Producto producto : itinerario) {
+//			tiempo += producto.getTiempo();
+//		}
 		return tiempo;
 	}
 
@@ -72,9 +73,10 @@ public class Usuario {
 		return atraccion_fav;
 	}
 
-	public LinkedList<Producto> getItinerario() {
-		return itinerario;
-	}
+//	public LinkedList<Producto> getItinerario() {
+////		return itinerario;
+//
+//	}
 
 	@Override
 	public String toString() {
@@ -84,21 +86,21 @@ public class Usuario {
 
 	public boolean tieneProducto(Producto producto) {
 
-		if (producto instanceof Paquete) { // si el producto es un paquete entonces
-			return this.getItinerario().contains(producto); // retorna true si el paquete esta en el itinerario
-		} else {
-			if (producto instanceof Atraccion) { // si el producto es una atraccion
-				for (Producto p : itinerario) { // recorres cada producto del itinerario
-					if (p instanceof Paquete) { // si el producto en el itinerario es un paquete
-						return ((Paquete) p).getAtracciones().contains(producto); // retorna true si la atraccion esta
-																					// en el paquete
-
-					} else if (p instanceof Atraccion) { // si el producto en el itinerario es un atraccion
-						return p.equals(producto); // retorna true si la atraccion en el itinerario es igual al producto
-					}
-				}
-			}
-		}
+//		if (producto instanceof Paquete) { // si el producto es un paquete entonces
+//			return this.getItinerario().contains(producto); // retorna true si el paquete esta en el itinerario
+//		} else {
+//			if (producto instanceof Atraccion) { // si el producto es una atraccion
+//				for (Producto p : itinerario) { // recorres cada producto del itinerario
+//					if (p instanceof Paquete) { // si el producto en el itinerario es un paquete
+//						return ((Paquete) p).getAtracciones().contains(producto); // retorna true si la atraccion esta
+//																					// en el paquete
+//
+//					} else if (p instanceof Atraccion) { // si el producto en el itinerario es un atraccion
+//						return p.equals(producto); // retorna true si la atraccion en el itinerario es igual al producto
+//					}
+//				}
+//			}
+//		}
 		return false;
 	}
 

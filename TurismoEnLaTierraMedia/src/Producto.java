@@ -3,13 +3,13 @@ public abstract class Producto {
 	private String nombre;
 	private int costo;
 	private double tiempo;
-
 	
 	public Producto(String nombre, int costo,double tiempo) {
 		super();
 		this.nombre = nombre;
 		this.costo = costo;
 		this.tiempo=tiempo;
+
 	}
 
 	public String getNombre() {
