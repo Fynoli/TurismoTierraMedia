@@ -1,179 +1,136 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Scanner;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
 import java.sql.*;
 
 public class Gestor {
 
-	private LinkedList<Producto> rechazados;
+	private LinkedList<Oferta> rechazados;
 
 	public Gestor() {
-		rechazados=new LinkedList<Producto>();
+		rechazados = new LinkedList<Oferta>();
+
+	}
+	
+	
+	
+	public LinkedList<Oferta> getRechazados() {
+		return rechazados;
 	}
 
-	public Oferta GenerarSugerencia(Usuario usuario) {
 
-		Oferta sugerencia;
 
-		sugerencia = buscarProducto(usuario,true);
-		if(sugerencia == null) {
-			sugerencia = buscarProducto(usuario,false);
+	public void setRechazados(LinkedList<Oferta> rechazados) {
+		this.rechazados = rechazados;
+	}
+
+
+
+	public Oferta generarOferta(Usuario usuario) throws SQLException {
+		if(BuscarOferta(usuario, true)==Oferta.vacia()) {
+			return BuscarOferta(usuario, false);
 		}
-
-		return sugerencia;
-	}
-
-	private Oferta buscarProductos(Usuario usuario) {
-		ResultSet rs = Basedatos.getResults("\n" +
-				"SELECT promocion.nombre, promocion.descripcion, SUM(promocion.costo), atraccion.nombre\n" +
-				"FROM tipo_atraccion\n" +
-				"JOIN atraccion ON tipo_atraccion.nombre = '"+ usuario.getAtraccion_fav()+"' AND tipo_atraccion.tipo_atraccion_id = atraccion.tipo_id\n" +
-				"JOIN promocion_atraccion ON promocion_atraccion.atraccion_id = atraccion.atraccion_id\n" +
-				"JOIN promocion ON promocion.promocion_id = promocion_atraccion.promocion_id");
-
-	}
-//	private Producto buscarProducto( Usuario usuario, boolean conPreferencia) throws java.sql.SQLException{
-//		//Primero paquetes(Primero preferencias, luego mas caros, luego mas tiempo) luego atracciones
-//		// tomo un usuario -> levanto las promo que coincida con los gustos ->
-//		//Buscamos un paquete que tenga una atraccion que el usuario prefiera
-//		ResultSet rs = Basedatos.getResults("\n" +
-//				"SELECT promocion.nombre, promocion.descripcion, SUM(promocion.costo), atraccion.nombre\n" +
-//				"FROM tipo_atraccion\n" +
-//				"JOIN atraccion ON tipo_atraccion.nombre = 'Degustacion' AND tipo_atraccion.tipo_atraccion_id = atraccion.tipo_id\n" +
-//				"JOIN promocion_atraccion ON promocion_atraccion.atraccion_id = atraccion.atraccion_id\n" +
-//				"JOIN promocion ON promocion.promocion_id = promocion_atraccion.promocion_id");
-//		if(rs != null) {
-//
-//		}
-//		SELECT DISTINCT promocion.nombre, promocion.descripcion, promocion.costo
-//		FROM tipo_atraccion
-//		JOIN atraccion ON tipo_atraccion.nombre = 'Degustacion' AND tipo_atraccion.tipo_atraccion_id = atraccion.tipo_id
-//		JOIN promocion_atraccion ON promocion_atraccion.atraccion_id = atraccion.atraccion_id
-//		JOIN promocion ON promocion.promocion_id = promocion_atraccion.promocion_id
-
-//		"promocion promocion_atraccion atraccion tipo_atraccion"
-//		"nombre_promocion costo_promo descripcion atracciones_nombre"
-//		"tipo_atraccion.nombre = usuario.atraccion_favorita && promo.tiempo < usuario.tiempo_disponible " +
-//				"&& promo.costo < usuario.presupuestp && promo.cupo >=1 && que la atraccion no en el itinerario"
-
-
-
-		//BUSCAMOS UN PAQUETE QUE CONTENGA UNA ATRACCION QUE SEA DE PREFERENCIA DEL USUARIO
-
-		//				for(Paquete producto: dataBase.getPaquetes()) {//Recorremos paquetes
-//					for(Atraccion atraccion: (producto).getAtracciones()) {
-//						if (!usuario.tieneProducto(producto) && !rechazados.contains(producto)) {
-//							if (usuario.puedeComprar(producto)) {
-//								if (producto.tieneCupo()) {
-//									if (conPreferencia) {
-//										if (atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {
-//											return producto;
-//										}
-//									}
-//									else {
-//										return producto;
-//									}
-//								}
-//							}
-//						}
-//
-//
-//					}
-
-	//				Buscamos la atraccion mas cara de las que coinciden con su preferencia
-	LinkedList<Atraccion> atracciones=new LinkedList<Atraccion>();
-				for(Atraccion atraccion: dataBase.getAtracciones()) {
-		if(!usuario.tieneProducto(atraccion) && !rechazados.contains(atraccion)) { // si el usuario no tiene la atraccion en su itinerario y tampoco la rechazo
-			if(usuario.puedeComprar(atraccion)) {
-				if(atraccion.tieneCupo()) {
-					if(conPreferencia) {
-						if(atraccion.getTipo_atraccion().equalsIgnoreCase(usuario.getAtraccion_fav())) {
-							atracciones.add(atraccion);
-						}
-
-					}
-					else {
-						atracciones.add(atraccion);
-					}
-				}
-			}
+		else {
+			return BuscarOferta(usuario, true);
 		}
-	}
-				if(!atracciones.isEmpty()) {
-		return atracciones.getFirst();
+		
 	}
 
-				return null;
-}
+	private Oferta BuscarOferta(Usuario usuario, boolean conPref) throws SQLException {
+		Oferta oferta = Oferta.vacia();
 
-
-
-	public void mostrarItinerario(Usuario usuario) {
-		System.out.println("\n\nItinerario de: " + usuario.getNombre());
-		for(Producto producto:usuario.getItinerario()) {
-			if(producto instanceof Paquete) {
-				System.out.println("\n" + (((Paquete) producto).toString()));
+		/*
+		 * Buscamos promos que contanga al menos una atracción de la preferencia del
+		 * usuario. Ninguna de las atracciones en la promo esta en el itinerario del
+		 * usuario
+		 */
+		ResultSet rs = Basedatos
+				.getResults("select promocion.nombre, promocion.descripcion, promocion.tipo_promocion, promocion.descuento\r\n"
+						+ "from promocion join promocion_atraccion on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
+						+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
+						+ "join tipo_atraccion on tipo_atraccion.tipo_atraccion_id = atraccion.tipo_id\r\n" + "\r\n"
+						+ this.conPref(conPref, usuario)
+						+ "group by promocion.nombre\r\n" + "\r\n" + "EXCEPT\r\n" + "\r\n"
+						+ "select promocion.nombre, promocion.descripcion, promocion.tipo_promocion, promocion.descuento\r\n"
+						+ "from promocion join promocion_atraccion on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
+						+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
+						+ "join tipo_atraccion on tipo_atraccion.tipo_atraccion_id = atraccion.tipo_id\r\n"
+						+ "where atraccion.atraccion_id IN (select detalle_itinerario.atraccion_id\r\n"
+						+ "								from detalle_itinerario join itinerario on itinerario.itinerario_id = detalle_itinerario.itinerario_id\r\n"
+						+ "								join usuario on usuario.usuario_id = itinerario.usuario_id\r\n"
+						+ "								where usuario.nombre =" + usuario.getNombre() + "')");
+		/* Hay hal menos una oferta de tipo promo que cumple los requisitos */
+		if (rs.isBeforeFirst()) {
+			oferta.setNombre(rs.getString(1));
+			oferta.setDescripcion(rs.getString(2));
+			ResultSet rs1=Basedatos.getResults("select sum(atraccion.costo) as costo, sum(atraccion.tiempo) as tiempo\r\n"
+					+ "from promocion join promocion_atraccion on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
+					+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
+					+ "where promocion.nombre = "+oferta.getNombre());
+			oferta.setPrecio(rs1.getInt(1));
+			oferta.setTiempo(rs1.getDouble(2));
+			/*
+			 * Aplicar la promoción para determinar el verdadero costo
+			 */
+			switch (rs.getInt(3)) {
+			/*Descuento porcentual*/
+			case 1: {
+				oferta.setPrecio(oferta.getPrecio() * Integer.parseInt(rs.getString(4)) / 100);
+				break;
 			}
-			else {
-				System.out.println("\n" + ((Atraccion) producto).toString());
+			/*Precio absoluto*/
+			case 2: {
+				oferta.setPrecio(Integer.parseInt(rs.getString(4)));
+				break;
+			}
+			case 3: {
+				ResultSet rs2 = Basedatos.getResults(
+						"select atraccion.costo from atraccion\r\n" + "where atraccion.nombre =" + rs.getString(4));
+				oferta.setPrecio(oferta.getPrecio() - rs2.getInt(1));
+				break;
+			}
+			}
+			if (rechazados.contains(oferta)) {
+				oferta = Oferta.vacia();
+			}
+			if(oferta!=Oferta.vacia()) {
+				return oferta;
 			}
 		}
+		/*
+		 * No hay ninguna oferta tipo promo que cumpla los requisitos. Buscamos una
+		 * atracción de la preferencia del usuario. Debe ser la mas cara y en caso de
+		 * haber empate debe ser la que mas tiempo consuma y no debe estar en el itinerario.
+		 */
+		rs = Basedatos
+				.getResults("select atraccion.nombre, atraccion.descripcion, atraccion.costo, atraccion.tiempo\r\n"
+						+ "from atraccion join tipo_atraccion on atraccion.tipo_id = tipo_atraccion.tipo_atraccion_id\r\n"
+						+ this.conPref(conPref, usuario)
+						+ "\r\n"
+						+ "\r\n"
+						+ "EXCEPT\r\n"
+						+ "\r\n"
+						+ "select atraccion.nombre, atraccion.descripcion, atraccion.costo, atraccion.tiempo\r\n"
+						+ "from atraccion join tipo_atraccion on atraccion.tipo_id = tipo_atraccion.tipo_atraccion_id\r\n"
+						+ "where atraccion.atraccion_id in(select detalle_itinerario.atraccion_id\r\n"
+						+ "								from detalle_itinerario join itinerario on itinerario.itinerario_id = detalle_itinerario.itinerario_id\r\n"
+						+ "														join usuario on usuario.usuario_id = itinerario.usuario_id\r\n"
+						+ "								where usuario.nombre = "+usuario.getNombre()+")\r\n"
+						+ "\r\n"
+						+ "order by costo desc, tiempo desc");
 
-		System.out.println("\nCosto total: " + usuario.costoItinerario() + " Monedas   Tiempo total: " + usuario.tiempoItinerario() + " Horas\n");
-		System.out.println("\n Le restan en su presupuesto: "+ usuario.getPresupuesto() + " Monedas y le quedan "+ usuario.getTiempo_disponible()+" Horas libres");
-
-	}
-
-	public void ImprimirItinerario(Usuario usuario) {
-		FileWriter archivo = null;
-		PrintWriter pw = null;
-		DateTimeFormatter df = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-		try
-		{
-			archivo = new FileWriter("TurismoTierraMedia/TurismoEnLaTierraMedia/itinerarios/itinerario de "+usuario.getNombre()+"_"+ df.format(LocalDateTime.now())+".txt");
-			pw = new PrintWriter(archivo);
-
-			pw.println("Cliente: "+usuario.getNombre()+"\n");
-			pw.println("Itinerario: ");
-
-			for(Producto producto:usuario.getItinerario()) {
-				if(producto instanceof Paquete) {
-					pw.println(((Paquete) producto).toString());
-				}
-				else {
-					pw.println(((Atraccion) producto).toString());
-				}
-			}
-
-			pw.println("\nCosto total: "+usuario.costoItinerario()+" Monedas        Tiempo total: "+usuario.tiempoItinerario()+" Horas");
-			pw.println("\n Le restan en su presupuesto: "+ usuario.getPresupuesto() + " Monedas y le quedan "+ usuario.getTiempo_disponible()+" Horas libres");
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				// Nuevamente aprovechamos el finally para
-				// asegurarnos que se cierra el fichero.
-				if (null != archivo)
-					archivo.close();
-			} catch (Exception e2) {
-				e2.printStackTrace();
+		if (rs.isBeforeFirst()) {
+			oferta = new Oferta(rs.getString(1), false, rs.getString(2), rs.getInt(3), rs.getDouble(4));
+			
+			if (!rechazados.contains(oferta)) {
+				return oferta;
 			}
 		}
+		return Oferta.vacia();
 	}
-
-//	public LinkedList<Producto> getRechazados() {
-//		return rechazados;
-//	}
-//
-//	public void setRechazados(LinkedList<Producto> rechazados) {
-//		this.rechazados = rechazados;
-//	}
-
-
-
+	
+	private String conPref(boolean conpref, Usuario usuario) {
+		if(conpref) {
+			return "where tipo_atraccion.nombre = " + usuario.getAtraccion_fav() + "\r\n";
+		}
+		return "";
+	}
 }

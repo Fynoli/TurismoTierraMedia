@@ -1,7 +1,22 @@
 import java.sql.*;
+import java.util.LinkedList;
 
 
 public abstract class Basedatos {
+
+
+	public static LinkedList<Usuario> cargarUsuarios() throws SQLException {
+		LinkedList<Usuario> usuarios = new LinkedList<Usuario>();
+		ResultSet rs = Basedatos.getResults("\n"
+				+ "SELECT usuario.nombre, usuario.usuario_id, usuario.presupuesto, tipo_atraccion.nombre, usuario.tiempo_disponible\n"
+				+ "FROM usuario\n"
+				+ "JOIN tipo_atraccion ON usuario.atraccion_favorita = tipo_atraccion.tipo_atraccion_id");
+		while (rs.next()) {
+			usuarios.add(new Usuario(rs.getString("nombre"), rs.getInt("presupuesto"),
+					rs.getDouble("tiempo_disponible"), rs.getString("tipo_atraccion.nombre")));
+		}
+		return usuarios;
+	}
 
     public static ResultSet getResults(String query){
         Connection miConexion = null;
