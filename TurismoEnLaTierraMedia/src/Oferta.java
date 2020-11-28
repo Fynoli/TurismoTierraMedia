@@ -5,6 +5,7 @@ public class Oferta{
 	private String descripcion;
 	private double tiempo;
 	private int precio;
+	//private int id;
 	public Oferta(String nombre,boolean paquete, String descripcion, int precio, double tiempo) {
 		super();
 		this.nombre = nombre;
@@ -12,6 +13,7 @@ public class Oferta{
 		this.tiempo = tiempo;
 		this.precio = precio;
 		this.paquete= paquete;
+		//this.id=id;
 	}
 	public Oferta() {
 		// TODO Auto-generated constructor stub
@@ -40,8 +42,6 @@ public class Oferta{
 	public void setPrecio(int precio) {
 		this.precio = precio;
 	}
-	
-	
 	
 	@Override
 	public String toString() {

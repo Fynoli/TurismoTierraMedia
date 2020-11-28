@@ -8,14 +8,12 @@ public class Usuario {
 	private int usuario_id;
 //	private LinkedList<Producto> itinerario;
 
-	
-
-	public Usuario(String nombre, int presupuesto, double tiempo_disponible, String atraccion_fav) {
+	public Usuario(int usuario_id, String nombre, int presupuesto, double tiempo_disponible, String atraccion_fav) {
 		this.nombre = nombre;
 		this.presupuesto = presupuesto;
 		this.tiempo_disponible = tiempo_disponible;
 		this.atraccion_fav = atraccion_fav;
-//		itinerario = new LinkedList<Producto>();
+		this.usuario_id = usuario_id;
 
 	}
 
@@ -24,21 +22,13 @@ public class Usuario {
 	 * Atraccion.getCosto(); this.tiempo_disponible -= Atraccion.getTiempoVisita();
 	 * }
 	 */
-	public boolean puedeComprar(Producto p) {
-		return this.getTiempo_disponible() >= p.getTiempo() && this.getPresupuesto() >= p.getCosto();
-	}
 
-	public void addProducto(Producto producto) {
-		if (producto instanceof Paquete) {// Si es paquete le quito un cupo a cada atraccion
-			for (Atraccion a : ((Paquete) producto).getAtracciones()) {
-				a.ocuparCupo();
-			}
-		} else if (producto instanceof Atraccion) {// si es atraccion le quito un cupo
-			((Atraccion) producto).ocuparCupo();
-		}
-//		itinerario.add(producto);
-		presupuesto -= producto.getCosto();
-		tiempo_disponible -= producto.getTiempo();
+	public void Comprar(Oferta oferta) {
+		presupuesto -= oferta.getPrecio();
+		tiempo_disponible -= oferta.getTiempo();
+		Basedatos.insert("UPDATE usuario SET presupuesto=" + this.presupuesto + ", tiempo_disponible="
+				+ this.tiempo_disponible + " Where usuario_id=" + this.usuario_id);
+
 	}
 
 	public int costoItinerario() {
@@ -73,35 +63,14 @@ public class Usuario {
 		return atraccion_fav;
 	}
 
-//	public LinkedList<Producto> getItinerario() {
-////		return itinerario;
-//
-//	}
+	public int getUsuario_id() {
+		return usuario_id;
+	}
 
 	@Override
 	public String toString() {
 		return "Usuario: " + nombre + "  Presupuesto: " + presupuesto + " monedas" + "  Tiempo disponible: "
 				+ tiempo_disponible + " horas" + "  Atraccion favorita: " + atraccion_fav;
-	}
-
-	public boolean tieneProducto(Producto producto) {
-
-//		if (producto instanceof Paquete) { // si el producto es un paquete entonces
-//			return this.getItinerario().contains(producto); // retorna true si el paquete esta en el itinerario
-//		} else {
-//			if (producto instanceof Atraccion) { // si el producto es una atraccion
-//				for (Producto p : itinerario) { // recorres cada producto del itinerario
-//					if (p instanceof Paquete) { // si el producto en el itinerario es un paquete
-//						return ((Paquete) p).getAtracciones().contains(producto); // retorna true si la atraccion esta
-//																					// en el paquete
-//
-//					} else if (p instanceof Atraccion) { // si el producto en el itinerario es un atraccion
-//						return p.equals(producto); // retorna true si la atraccion en el itinerario es igual al producto
-//					}
-//				}
-//			}
-//		}
-		return false;
 	}
 
 }

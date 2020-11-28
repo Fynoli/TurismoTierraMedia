@@ -1,11 +1,12 @@
 import java.io.FileNotFoundException;
+import java.sql.SQLException;
 import java.util.LinkedList;
 import java.io.*;
 import java.util.Scanner;
 
 public class Aplicacion {
 
-	public static void main(String[] args) throws FileNotFoundException{
+	public static void main(String[] args) throws SQLException{
 		
 		LinkedList<Usuario> usuarios= new LinkedList<Usuario>();
 		usuarios=Basedatos.cargarUsuarios();
@@ -21,6 +22,7 @@ public class Aplicacion {
 			System.out.println("Bienvenido " + usuario.getNombre() + ". Prepara tu itinerario");
 			System.out.println("Presta atencion a las siguientes ofertas: ");
 			while(Oferta.vacia() != (oferta = gestor.generarOferta(usuario))) {
+				
 				System.out.println("Monedas restantes: " + usuario.getPresupuesto() + " Tiempo restante: " + usuario.getTiempo_disponible());
 				System.out.println(oferta);
 				System.out.println("Desea comprarla?");
@@ -30,7 +32,8 @@ public class Aplicacion {
 				if(decision.equalsIgnoreCase("Y")) {
 
 
-					/*TODO: Agregar la oferta al itinerario, quitar tiempo y dinero al usuario y reducir cupo de las atracciones*/
+					gestor.modifItinerario(usuario, oferta);
+					
 					
 					
 					System.out.println("Producto adquirido!");
