@@ -63,7 +63,7 @@ public class Gestor {
 					.getResults("select sum(atraccion.costo) as costo, sum(atraccion.tiempo) as tiempo\r\n"
 							+ "from promocion join promocion_atraccion on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
 							+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
-							+ "where promocion.nombre = " + oferta.getNombre());
+							+ "where promocion.nombre = '" + oferta.getNombre()+"'");
 			oferta.setPrecio(rs1.getInt(1));
 			oferta.setTiempo(rs1.getDouble(2));
 			/*
@@ -82,7 +82,8 @@ public class Gestor {
 			}
 			case 3: {
 				ResultSet rs2 = Basedatos.getResults(
-						"select atraccion.costo from atraccion\r\n" + "where atraccion.nombre =" + rs.getString(4));
+						"select atraccion.costo from atraccion\r\n"
+								+ "where atraccion.nombre ='" + rs.getString(4)+"')");
 				oferta.setPrecio(oferta.getPrecio() - rs2.getInt(1));
 				break;
 			}
@@ -106,13 +107,16 @@ public class Gestor {
 		rs = Basedatos
 				.getResults("select atraccion.nombre, atraccion.descripcion, atraccion.costo, atraccion.tiempo\r\n"
 						+ "from atraccion join tipo_atraccion on atraccion.tipo_id = tipo_atraccion.tipo_atraccion_id\r\n"
-						+ this.conPref(conPref, usuario) + "\r\n" + "\r\n" + "EXCEPT\r\n" + "\r\n"
+						+ this.conPref(conPref, usuario) + "\r\n"
+						+ "\r\n"
+						+ "EXCEPT\r\n"
+						+ "\r\n"
 						+ "select atraccion.nombre, atraccion.descripcion, atraccion.costo, atraccion.tiempo\r\n"
 						+ "from atraccion join tipo_atraccion on atraccion.tipo_id = tipo_atraccion.tipo_atraccion_id\r\n"
 						+ "where atraccion.atraccion_id in(select detalle_itinerario.atraccion_id\r\n"
 						+ "								from detalle_itinerario join itinerario on itinerario.itinerario_id = detalle_itinerario.itinerario_id\r\n"
 						+ "														join usuario on usuario.usuario_id = itinerario.usuario_id\r\n"
-						+ "								where usuario.nombre = " + usuario.getNombre() + ")\r\n"
+						+ "								where usuario.nombre ='" + usuario.getNombre() + "')\r\n"
 						+ "\r\n" + "order by costo desc, tiempo desc");
 
 		if (rs.isBeforeFirst()) {
@@ -130,7 +134,7 @@ public class Gestor {
 
 	private String conPref(boolean conpref, Usuario usuario) {
 		if (conpref) {
-			return "where tipo_atraccion.nombre = '"+usuario.getAtraccion_fav()+"' AND atraccion.cupo > 1";
+			return "where tipo_atraccion.nombre ='"+usuario.getAtraccion_fav()+"' AND atraccion.cupo > 1";
 		}
 		return "where atraccion.cupo > 1";
 	}
@@ -155,7 +159,7 @@ public class Gestor {
 		// Conseguimos el id del itinerario del usuario
 		ResultSet rs;
 		rs = Basedatos.getResults("SELECT itinerario.itinerario_id \r\n" + "FROM itinerario \r\n"
-				+ "JOIN usuario ON itinerario.usuario_id = " + usuario.getUsuario_id());
+				+ "JOIN usuario ON itinerario.usuario_id =" + usuario.getUsuario_id()+")");
 		int itinerario_id = rs.getInt(1);
 
 		if (oferta.isPaquete()) {
@@ -163,22 +167,22 @@ public class Gestor {
 					+ "from promocion join promocion_atraccion \r\n"
 					+ "on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
 					+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
-					+ "where promocion.nombre ="+oferta.getNombre());
+					+ "where promocion.nombre ='"+oferta.getNombre()+"')");
 			
 			while(rs.next()) {
-				Basedatos.insert("INSERT INTO detalle_itinerario (itinerario_id, atraccion_id)\r\n" + "VALUES ("
-						+ itinerario_id + "," + rs.getInt(1) + ")");
+				Basedatos.insert("INSERT INTO detalle_itinerario (itinerario_id, atraccion_id)\r\n"
+						+ "VALUES ("+ itinerario_id + "," + rs.getInt(1) + ")");
 			}
 			
 
 		} else {
 			// Obtenemos la id de la atraccion
 			rs = Basedatos.getResults("SELECT atraccion.atraccion_id\r\n" + "FROM atraccion\r\n"
-					+ "WHERE atraccion.nombre =" + oferta.getNombre());
+					+ "WHERE atraccion.nombre ='" + oferta.getNombre()+"')");
 			int atraccion_id = rs.getInt(1);
 
-			Basedatos.insert("INSERT INTO detalle_itinerario (itinerario_id, atraccion_id)\r\n" + "VALUES ("
-					+ itinerario_id + "," + atraccion_id + ")");
+			Basedatos.insert("INSERT INTO detalle_itinerario (itinerario_id, atraccion_id)\r\n"
+					+ "VALUES ("+ itinerario_id + "," + atraccion_id + ")");
 		}
 
 	}
