@@ -48,6 +48,11 @@ public class Oferta{
 	}
 
 	@Override
+	public boolean equals(Object obj) {
+		// TODO Auto-generated method stub
+		return ((Oferta) obj).getNombre().equals(this.nombre);
+	}
+	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
 		return "Producto: "+this.nombre+ " Descripcion: "+this.descripcion+" Precio: "+this.precio+" Monedas Tiempo de recorrido: "+this.tiempo;

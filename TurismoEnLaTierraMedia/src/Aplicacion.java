@@ -21,7 +21,7 @@ public class Aplicacion {
 		for (Usuario usuario : usuarios) {
 			System.out.println("Bienvenido " + usuario.getNombre() + ". Prepara tu itinerario");
 			System.out.println("Presta atencion a las siguientes ofertas: ");
-			while(! gestor.generarOferta(usuario).getNombre().equals("Vacia")) {
+			while(! gestor.generarOferta(usuario).equals(Oferta.vacia())) {
 				oferta = gestor.generarOferta(usuario);
 				System.out.println("Monedas restantes: " + usuario.getPresupuesto() + " Tiempo restante: " + usuario.getTiempo_disponible());
 				System.out.println(oferta);
@@ -30,12 +30,7 @@ public class Aplicacion {
 				System.out.println("N - No");
 				decision=sc.next();
 				if(decision.equalsIgnoreCase("Y")) {
-
-
 					gestor.modifItinerario(usuario, oferta);
-					
-					
-					
 					System.out.println("Producto adquirido!");
 				}
 				else {

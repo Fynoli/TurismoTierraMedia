@@ -21,7 +21,7 @@ public class Gestor {
 	}
 
 	public Oferta generarOferta(Usuario usuario) throws SQLException {
-		if (BuscarOferta(usuario, true) == Oferta.vacia()) {
+		if (BuscarOferta(usuario, true).equals(Oferta.vacia())) {
 			return BuscarOferta(usuario, false);
 		} else {
 			return BuscarOferta(usuario, true);
@@ -97,7 +97,7 @@ public class Gestor {
 			if (rechazados.contains(oferta)) {
 				oferta = Oferta.vacia();
 			}
-			if (oferta != Oferta.vacia()) {
+			if (!oferta.equals(Oferta.vacia())) {
 				return oferta;
 			}
 		}
@@ -119,16 +119,16 @@ public class Gestor {
 						+ "where atraccion.atraccion_id in(select detalle_itinerario.atraccion_id\r\n"
 						+ "								from detalle_itinerario join itinerario on itinerario.itinerario_id = detalle_itinerario.itinerario_id\r\n"
 						+ "														join usuario on usuario.usuario_id = itinerario.usuario_id\r\n"
-						+ "								where usuario.nombre ='" + usuario.getNombre() + "')\r\n"
+						+ "								where usuario.nombre LIKE '%" + usuario.getNombre() + "')\r\n"
 						+ "\r\n" + "order by costo desc, tiempo desc");
 
-		if (rs.isBeforeFirst()) {
+		while (rs.next()) {
 			oferta = new Oferta(rs.getString(1), false, rs.getString(2), rs.getInt(3), rs.getDouble(4));
 
 			if (usuario.getPresupuesto() < oferta.getPrecio() || usuario.getTiempo_disponible() < oferta.getTiempo()) {
 				oferta = Oferta.vacia();
 			}
-			if (!rechazados.contains(oferta)) {
+			if (!rechazados.contains(oferta) && !oferta.equals(Oferta.vacia())) {
 				return oferta;
 			}
 		}
@@ -156,7 +156,7 @@ public class Gestor {
 		 */
 
 		// Guardamos en db un itinerario asociado al usuario
-		Basedatos.insert("INSERT INTO itinerario (fecha, usuario_id)\r\n" + "VALUES (" + fecha + ","
+		Basedatos.insert("INSERT INTO itinerario (fecha, usuario_id)\r\n" + "VALUES ('" + fecha + "',"
 				+ usuario.getUsuario_id() + ")");
 
 		// Conseguimos el id del itinerario del usuario

@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.LinkedList;
 
 
-public abstract class Basedatos {
+public class Basedatos {
 
 
 	public static LinkedList<Usuario> cargarUsuarios() throws SQLException {
@@ -18,7 +18,7 @@ public abstract class Basedatos {
 		return usuarios;
 	}
 
-    public static ResultSet getResults(String query){
+    public static ResultSet getResults(String query) throws SQLException{
         Connection miConexion = null;
         try{
             String url = "jdbc:sqlite:Turismo.db";
@@ -26,17 +26,18 @@ public abstract class Basedatos {
             
             final PreparedStatement statement = miConexion.prepareStatement(query);
             ResultSet miResultSet = statement.executeQuery();
-
             return miResultSet;
 
         }catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error y listo");
             return null;
+        }finally {
+        	miConexion.close();
         }
     }
 
-    public static boolean insert(String query){
+    public static boolean insert(String query) throws SQLException{
     	Connection miConexion = null;
         try{
 
@@ -50,6 +51,8 @@ public abstract class Basedatos {
         }catch (Exception e) {
             e.printStackTrace();
             return false;
+        }finally {
+        	miConexion.close();
         }
     }
 }

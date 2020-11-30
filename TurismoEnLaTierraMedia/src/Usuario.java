@@ -1,3 +1,4 @@
+import java.sql.SQLException;
 import java.util.*;
 
 public class Usuario {
@@ -23,7 +24,7 @@ public class Usuario {
 	 * }
 	 */
 
-	public void Comprar(Oferta oferta) {
+	public void Comprar(Oferta oferta) throws SQLException {
 		presupuesto -= oferta.getPrecio();
 		tiempo_disponible -= oferta.getTiempo();
 		Basedatos.insert("UPDATE usuario SET presupuesto=" + this.presupuesto + ", tiempo_disponible="
