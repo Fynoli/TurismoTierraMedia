@@ -21,8 +21,8 @@ public class Aplicacion {
 		for (Usuario usuario : usuarios) {
 			System.out.println("Bienvenido " + usuario.getNombre() + ". Prepara tu itinerario");
 			System.out.println("Presta atencion a las siguientes ofertas: ");
-			while(Oferta.vacia() != (oferta = gestor.generarOferta(usuario))) {
-				
+			while(! gestor.generarOferta(usuario).getNombre().equals("Vacia")) {
+				oferta = gestor.generarOferta(usuario);
 				System.out.println("Monedas restantes: " + usuario.getPresupuesto() + " Tiempo restante: " + usuario.getTiempo_disponible());
 				System.out.println(oferta);
 				System.out.println("Desea comprarla?");

@@ -38,7 +38,7 @@ public class Gestor {
 		 * usuario
 		 */
 		ResultSet rs = Basedatos.getResults(
-				"select promocion.nombre, promocion.descripcion, atraccion.atraccion_id\r\n"
+				"select promocion.nombre, promocion.descripcion, atraccion.atraccion_id, promocion.tipo_promocion, promocion.descuento\r\n"
 				+ "from promocion join promocion_atraccion on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
 				+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
 				+ "join tipo_atraccion on tipo_atraccion.tipo_atraccion_id = atraccion.tipo_id\r\n"
@@ -47,7 +47,7 @@ public class Gestor {
 				+ "\r\n"
 				+ "EXCEPT\r\n"
 				+ "\r\n"
-				+ "select promocion.nombre, promocion.descripcion, atraccion.atraccion_id\r\n"
+				+ "select promocion.nombre, promocion.descripcion, atraccion.atraccion_id, promocion.tipo_promocion, promocion.descuento\r\n"
 				+ "from promocion join promocion_atraccion on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
 				+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
 				+ "join tipo_atraccion on tipo_atraccion.tipo_atraccion_id = atraccion.tipo_id\r\n"
@@ -55,36 +55,39 @@ public class Gestor {
 				+ "								from detalle_itinerario join itinerario on itinerario.itinerario_id = detalle_itinerario.itinerario_id\r\n"
 				+ "								join usuario on usuario.usuario_id = itinerario.usuario_id\r\n"
 				+ "								where usuario.nombre ='"+usuario.getNombre()+"')");
-		/* Hay hal menos una oferta de tipo promo que cumple los requisitos */
-		if (rs.next()) {
+		/* Hay  almenos una oferta de tipo promo que cumple los requisitos */
+		while (rs.next()) {
 			oferta.setNombre(rs.getString(1));
 			oferta.setDescripcion(rs.getString(2));
+			oferta.setPaquete(true);
 			ResultSet rs1 = Basedatos
 					.getResults("select sum(atraccion.costo) as costo, sum(atraccion.tiempo) as tiempo\r\n"
 							+ "from promocion join promocion_atraccion on promocion.promocion_id = promocion_atraccion.promocion_id\r\n"
 							+ "join atraccion on atraccion.atraccion_id = promocion_atraccion.atraccion_id \r\n"
-							+ "where promocion.nombre = '" + oferta.getNombre()+"'");
+							+ "where promocion.nombre LIKE '%" + oferta.getNombre()+"'");
 			oferta.setPrecio(rs1.getInt(1));
 			oferta.setTiempo(rs1.getDouble(2));
 			/*
 			 * Aplicar la promoción para determinar el verdadero costo
 			 */
-			switch (rs.getInt(3)) {
+			switch (rs.getInt(4)) {
 			/* Descuento porcentual */
 			case 1: {
-				oferta.setPrecio(oferta.getPrecio() * Integer.parseInt(rs.getString(4)) / 100);
+				oferta.setPrecio(oferta.getPrecio() * Integer.parseInt(rs.getString(5)) / 100);
 				break;
 			}
-			/* Precio absoluto */
+			/* Atraccion Gratuita */
 			case 2: {
-				oferta.setPrecio(Integer.parseInt(rs.getString(4)));
-				break;
-			}
-			case 3: {
+
 				ResultSet rs2 = Basedatos.getResults(
 						"select atraccion.costo from atraccion\r\n"
-								+ "where atraccion.nombre ='" + rs.getString(4)+"')");
+								+ "where atraccion.nombre ='" + rs.getString(5)+"'");
 				oferta.setPrecio(oferta.getPrecio() - rs2.getInt(1));
+				break;
+			}
+			/*Precio Absoluto*/
+			case 3: {
+				oferta.setPrecio(Integer.parseInt(rs.getString(5)));
 				break;
 			}
 			}
@@ -159,7 +162,7 @@ public class Gestor {
 		// Conseguimos el id del itinerario del usuario
 		ResultSet rs;
 		rs = Basedatos.getResults("SELECT itinerario.itinerario_id \r\n" + "FROM itinerario \r\n"
-				+ "JOIN usuario ON itinerario.usuario_id =" + usuario.getUsuario_id()+")");
+				+ "JOIN usuario ON itinerario.usuario_id =" + usuario.getUsuario_id()+"");
 		int itinerario_id = rs.getInt(1);
 
 		if (oferta.isPaquete()) {
